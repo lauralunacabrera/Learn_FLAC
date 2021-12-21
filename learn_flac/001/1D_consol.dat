@@ -1,0 +1,66 @@
+; ------------------------------------------------------------------------------
+; Test
+; ------------------------------------------------------------------------------
+new
+set cd name C:\Users\gordon\Desktop\Learn_FLAC\learn_flac\001
+set grav 9.81
+
+; ------------------------------------------------------------------------------
+; Fluid-Mechanical Interaction Configuration
+; ------------------------------------------------------------------------------
+config gwflow       ; Pg. 1-16 
+set fastflow on     ; Pg. 1-16
+water density 997   ; Pg. 1-26 (kg/m3)
+water tension 1e10  ;
+water bulk 2e9      ;
+
+; ------------------------------------------------------------------------------
+; Geometry and Boundary Conditions
+; ------------------------------------------------------------------------------
+; Grid
+grid 20, 10
+ini x mul 0.01, y mul 0.01
+
+; Displacement Boundary Conditions
+fix x y j=1
+fix x   i=1
+fix x   i=21
+
+; Flow Boundary Conditions
+initial pp 0 j=1     ; Zero pore pressure at bot
+initial pp 0 j=11    ; Zero pore pressure at top
+fix pp j=1           ; Free surface at bot
+fix pp j=11          ; Free surface at top
+fix saturation  j=1  ; Mantain saturation at bot
+fix saturation  j=11 ; Mantain saturation at top
+
+; ------------------------------------------------------------------------------
+; Material Properties
+; ------------------------------------------------------------------------------
+model elastic
+prop bulk=1e8 shear=.3e8 dens=1000 porosity=0.5
+prop perm=1e-6
+
+; ------------------------------------------------------------------------------
+; Initial Solve
+; ------------------------------------------------------------------------------
+set flow off mech off
+history 999 unbalanced
+solve elastic
+
+; Solve the static problem
+pause
+
+; Plot results
+set output 001_before_load.jpg
+set plot jpg size 3000 1500
+plot pen syy fill grid black
+
+; Apply a sitting load of 5kPa
+apply syy=-5000 j=11
+solve
+
+; Plot results
+set output 002_after_load.jpg
+set plot jpg size 3000 1500
+plot pen syy fill grid white apply aforce red

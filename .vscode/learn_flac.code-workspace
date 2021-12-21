@@ -1,0 +1,34 @@
+{
+	"folders":
+	[
+		{   // Source code
+			"name": "Playground"  ,
+			"path": "../learn_flac/" ,
+        },	
+		{	// Everything
+			"name": "Everything",
+			"path": "../",
+		},
+	],
+
+	"settings":
+	{	
+		// Python
+		"python.analysis.disabled": ["unresolved-import"],
+		
+		// Explorer
+		"explorer.autoReveal": false,
+		"explorer.compactFolders": false,
+		
+		// Window
+		"window.title": "PLAYGROUND 🦕 Have fun!!",
+		"customWindowZoom.zoomLevelChangeValue": 0.1,
+
+		// Editor
+		"editor.wordWrapColumn": 79,
+		"editor.codeLens": false,
+		"window.titleSeparator": "|",
+	
+		
+	}
+}
